@@ -2,22 +2,25 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+extern int CAPACITY;
 int main() {
   bool quit = false;
+  Bank bank[CAPACITY];
 
   while (!quit) {
     switch (Menu()) {
       case 1:
-        CreateBank();
+        CreateBank(bank);
         break;
       case 2:
-        ListBank();
+        ListBank(bank);
+        Wait();
         break;
       case 3:
-        DeleteBank();
+        DeleteBank(bank);
         break;
       case 4:
-        AlterBank();
+        AlterBank(bank);
         break;
       case 5:
         quit = true;

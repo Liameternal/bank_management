@@ -9,7 +9,18 @@
 #define NAME_LEN 16
 // Allow 20 character of passed
 #define PASS_LEN 21
+/*
+ * Set DEBUG mode
+ * Uncomment this will make blocks surrounded by #define DEBUG work
+ */
 //#define DEBUG
+
+/*
+ * Set linux terminal mode
+ * Uncomment this will make blocks surrounded by #define LINUX_TERMINAL work
+ */
+#define LINUX_TERMINAL
+
 typedef int Status;
 typedef struct {
   char username[NAME_LEN];
@@ -23,12 +34,14 @@ typedef struct {
  */
 int Menu(void);
 
-Status CreateBank(void);
+void Wait(void);
 
-Status ListBank(void);
+Status CreateBank(Bank *bank);
 
-Status DeleteBank(void);
+Status ListBank(const Bank *bank);
 
-Status AlterBank(void);
+Status DeleteBank(Bank *bank);
+
+Status AlterBank(Bank *bank);
 
 #endif//BANK_MANAGEMENT_BANK_H

@@ -36,12 +36,16 @@ int Menu(void);
 
 void Wait(void);
 
-Status CreateBank(Bank *bank);
+Status Initialize(Bank *bank);
 
-Status ListBank(const Bank *bank);
+Status CreateBank(Bank* bank);
 
-Status DeleteBank(Bank *bank);
+Status ListBank(const Bank* bank);
 
-Status AlterBank(Bank *bank);
+Status DeleteBank(Bank* bank);
+
+Status AlterBank(Bank* bank);
+
+Status Quit(const Bank* bank);
 
 #endif//BANK_MANAGEMENT_BANK_H

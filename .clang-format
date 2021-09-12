@@ -52,6 +52,7 @@ ObjCSpaceBeforeProtocolList: true
 PPIndentWidth: -1
 PointerAlignment: Left
 ReflowComments: false
+SortIncludes: Never
 SpaceAfterCStyleCast: true
 SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: false

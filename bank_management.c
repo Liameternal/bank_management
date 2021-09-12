@@ -6,6 +6,7 @@ extern int CAPACITY;
 int main() {
   bool quit = false;
   Bank bank[CAPACITY];
+  Initialize(bank);
 
   while (!quit) {
     switch (Menu()) {
@@ -23,6 +24,7 @@ int main() {
         AlterBank(bank);
         break;
       case 5:
+        Quit(bank);
         quit = true;
         break;
       default:

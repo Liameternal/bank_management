@@ -8,12 +8,14 @@
 /*
  * For linux terminal,reference: https://psychocod3r.wordpress.com/2019/02/25/how-to-get-the-dimensions-of-a-linux-terminal-window-in-c/
  */
-#include "myhead/myself.h"
+#include <sys/ioctl.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/ioctl.h>
+#include <unistd.h>
+#include "myhead/myself.h"
 
 #define MENU_BAR 7
+#define FILENAME "bank.dat"
 
 int bank_account_num = 0;
 #ifdef DEBUG
@@ -59,6 +61,10 @@ static void EatLine(void);
  * Draw menu
  */
 static void ReDraw(void);
+
+static int ReadData(Bank* b, FILE* fp);
+
+static int WriteData(const Bank* b, FILE* fp);
 
 
 int Menu(void) {
@@ -132,8 +138,58 @@ static void ReDraw(void) {
 #endif
 }
 
+static int ReadData(Bank* b, FILE* fp) {
+  if ((fp = fopen(FILENAME, "rb")) == NULL) {
+    fprintf(stderr, "Can't open %s\n", FILENAME);
+    exit(EXIT_FAILURE);
+  }
+  if (fread(&bank_account_num, sizeof(int), 1, fp) != 1) {
+    fprintf(stderr, "Read bank account num failed\n");
+    exit(EXIT_FAILURE);
+  }
+  if (fread(b, sizeof(Bank), bank_account_num, fp) != bank_account_num) {
+    fprintf(stderr, "Read bank account failed\n");
+    exit(EXIT_FAILURE);
+  }
+  printf("Read successfully\n");
+  sleep(1);
+  return 1;
+}
+
+static int WriteData(const Bank* b, FILE* fp) {
+  if ((fp = fopen(FILENAME, "wb")) == NULL) {
+    fprintf(stderr, "Can't open %s\n", FILENAME);
+    exit(EXIT_FAILURE);
+  }
+  if ((fp = freopen(FILENAME, "ab", fp)) == NULL) {
+    fprintf(stderr, "Can't reopen %s\n", FILENAME);
+    exit(EXIT_FAILURE);
+  }
+  if (fwrite(&bank_account_num, sizeof(int), 1, fp) != 1) {
+    fprintf(stderr, "Write bank account num failed\n");
+    exit(EXIT_FAILURE);
+  }
+  if (fwrite(b, sizeof(Bank), bank_account_num, fp) != bank_account_num) {
+    fprintf(stderr, "Write bank account failed\n");
+    exit(EXIT_FAILURE);
+  }
+  printf("Write successfully\n");
+  sleep(1);
+
+  return 1;
+}
+
+Status Initialize(Bank* bank) {
+  FILE* fp;
+
+  ReadData(bank, fp);
+
+  return 1;
+}
+
 Status CreateBank(Bank* bank) {
   Bank temp;
+
   if (bank_account_num < CAPACITY) {
     printf("Enter your bank account: ");
     StrGet(temp.username, NAME_LEN, stdin);
@@ -220,7 +276,13 @@ Status AlterBank(Bank* bank) {
   return 1;
 }
 
- void Wait(void) {
+void Wait(void) {
   printf("Press any key to continue...\n");
   getchar();
+}
+
+Status Quit(const Bank* bank) {
+  FILE* fp;
+
+  WriteData(bank, fp);
 }
